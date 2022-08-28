@@ -12,15 +12,53 @@ public class HomeController : Controller
     {
         _logger = logger;
     }
+ 
+    public IActionResult Index(float a, float b)
+    {
+        if(a == 0){
+            if(b == 0 ){
+                ViewBag.Result = ("Phương trình này có vố số nghiệm!!!");
+            }else{
+                ViewBag.Result =("Phương trình này vô nghiệm!!!");
+            }
+        }else{
+            ViewBag.Result = ("Phương trình này có nghiệm x =" + (-b/a));
+        }
+        return View("Index");
+    }
 
-    public IActionResult Index()
+    [HttpGet]
+    public IActionResult Privacy()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    [HttpPost]
+    public IActionResult Privacy(float a, float b, float c)
     {
-        return View();
+        if(a == 0){
+            if( b == 0){
+                if(c == 0){
+                    ViewBag.Result = ("Phương trình này vô số nghiệm");
+                }else{
+                    ViewBag.Result = ("Phương trình này vô nghiệm");
+                }
+            }else{
+                ViewBag.Result = ("Phương trình này có một nghiệm duy nhất là x =" + (-c/b));
+            }
+        }else{
+            float delta = b * b - 4 * a * c;
+            if(delta < 0){
+                ViewBag.Result = ("Phương trình này vô nghiệm");
+            }else if(delta == 0){
+                ViewBag.Result = ("Phương trình này có nghiệm kép x1 = x2 =" + (-b / (2 * a)));
+            }else{
+                double x1 = (-b + Math.Sqrt(delta) / (2 * a));
+                double x2 = (-b - Math.Sqrt(delta) / (2 * a));
+                ViewBag.Result = ("Phương trình này có 2 nghiệm phân biệt x1 =" + x1 +"x2 =" + x2);
+            }             
+        } 
+        return View("Privacy");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -29,3 +67,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
